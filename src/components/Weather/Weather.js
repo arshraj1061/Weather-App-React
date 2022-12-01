@@ -1,5 +1,4 @@
 import { memo, useCallback, useContext, useEffect, useState } from "react";
-import sendRequest from "../../backend/back";
 import FavItem from "../Favourites/FavItem";
 import InputForm from "./InputForm";
 import ResultWeather from "./ResultWeather";
@@ -105,11 +104,19 @@ const Weather = () => {
     setLoadingFav(false);
   };
 
-  const getWeatherHandler = async (value) => {
+  const getWeatherHandler = async (place) => {
     setLoadingWeather(true); // Get Weather
-    const data = await sendRequest(value);
-    setWeather(data);
-    setLoadingWeather(false);
+    await fetch(`/weather?` + new URLSearchParams({ loc: place }).toString(), {
+      method: "GET",
+      headers: {
+        "Content-type": "applicaton/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setWeather(data);
+        setLoadingWeather(false);
+      });
   };
 
   return (
@@ -136,9 +143,7 @@ const Weather = () => {
           <LoadingSpinner />
         </div>
       )}
-      {!loadingWeather && weather && (
-        <ResultWeather data={weather[0]} loc={weather[1]} />
-      )}
+      {!loadingWeather && weather && <ResultWeather data={weather} />}
     </div>
   );
 };

@@ -10,12 +10,12 @@ const ResultWeather = (props) => {
         <ul>
           <li>
             <h3>Location</h3>
-            <div className={classes.data}>{props.loc}</div>
+            <div className={classes.data}>{props.data.Location}</div>
             </li>
           <li>
             <h3>Weather Description</h3>
             <div className={classes.data}>
-              {props.data.Weather_description}
+              {props.data.Weather_Description}
             </div>
           </li>
           <li>
